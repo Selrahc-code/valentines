@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>💌</title>
+  <title>💌 Vanessa</title>
   <style>
     body{
       margin:0; min-height:100vh; display:grid; place-items:center;
@@ -12,87 +12,80 @@
       color:#222;
     }
     .card{
-      width:min(520px, 92vw);
-      background: rgba(255,255,255,.85);
+      width:min(560px, 92vw);
+      background: rgba(255,255,255,.88);
       border: 1px solid rgba(0,0,0,.08);
       border-radius: 24px;
       padding: 28px;
       box-shadow: 0 20px 60px rgba(0,0,0,.12);
       text-align:center;
     }
-    h1{ margin:0 0 6px; font-size: 28px; }
-    p{ margin: 10px 0 18px; font-size: 16px; opacity:.9; }
-    .buttons{ display:flex; gap:12px; justify-content:center; flex-wrap:wrap; }
+    .heart{ font-size: 44px; margin-bottom: 10px; }
+    h1{ margin:0 0 8px; font-size: 28px; }
+    p{ margin: 10px 0; font-size: 16px; opacity:.92; line-height:1.4; }
+    .buttons{ display:flex; gap:12px; justify-content:center; flex-wrap:wrap; margin-top: 18px; }
     button{
       border:0; border-radius: 16px; padding: 12px 18px;
       font-size: 16px; cursor:pointer;
       box-shadow: 0 10px 25px rgba(0,0,0,.12);
+      transition: transform .12s ease;
     }
+    button:active{ transform: scale(.98); }
     #yes{ background:#ff4d6d; color:white; }
-    #no{ background:#f1f1f1; }
-    .small{ font-size: 13px; opacity:.7; margin-top: 14px; }
-    .heart{ font-size: 42px; margin-bottom: 10px; }
+    #no{ background:#f1f1f1; color:#222; }
+    .tiny{ font-size: 13px; opacity:.7; margin-top: 14px; }
   </style>
 </head>
 <body>
-  <div class="card">
+  <div class="card" id="card">
     <div class="heart">💖</div>
-    <h1>Will you be my Valentine?</h1>
-    <p id="msg">I made this just for you :)</p>
+    <h1>Vanessa, will you be my valentines?</h1>
 
-    <div class="buttons">
+    <p id="msg">
+      If you say yes… I will treat you to <b>Violino Gastronomia Italiana</b>
+      <br/>on the <b>15th</b> at <b>7pm</b> 👀🍝
+    </p>
+
+    <div class="buttons" id="buttons">
       <button id="yes">Yes 💘</button>
       <button id="no">No 🙃</button>
     </div>
 
-    <div class="small" id="tiny">tap “yes” (please)</div>
+    <div class="tiny" id="tiny">choose wisely 😌</div>
   </div>
 
   <script>
+    const card = document.getElementById("card");
     const msg = document.getElementById("msg");
     const tiny = document.getElementById("tiny");
-    const noBtn = document.getElementById("no");
+    const buttons = document.getElementById("buttons");
     const yesBtn = document.getElementById("yes");
+    const noBtn = document.getElementById("no");
 
-    const noLines = [
-      "Are you sure? 😭",
-      "Like… 100% sure? 🥲",
-      "Okay but I made this… 😔",
-      "What if I say please? 🙏",
-      "Last chance… 😳"
-    ];
-    let n = 0;
+    function showFinal(type){
+      const isYes = type === "yes";
 
-    noBtn.addEventListener("click", () => {
-      msg.textContent = noLines[Math.min(n, noLines.length - 1)];
-      n++;
-      // make the Yes button grow a bit each time
-      const scale = 1 + n * 0.12;
-      yesBtn.style.transform = `scale(${scale})`;
-      tiny.textContent = "the Yes button is looking pretty good rn";
-    });
+      const title = isYes ? "YAYYY So excited!!" : "Yeah… we going anyways 😌";
+      const line1 = isYes
+        ? "I shall pick you up <b>6pm</b>!"
+        : "See you <b>6pm</b>!";
+      const emoji = isYes ? "🥰" : "😎";
 
-    yesBtn.addEventListener("click", () => {
-      document.body.innerHTML = `
-        <div style="
-          min-height:100vh; display:grid; place-items:center;
-          font-family: system-ui; background: radial-gradient(circle at top, #fff0f6, #fff);
-          text-align:center; padding:24px;">
-          <div style="
-            width:min(560px, 92vw); background:white; border-radius:28px;
-            padding:34px; box-shadow: 0 20px 60px rgba(0,0,0,.12);">
-            <div style="font-size:52px;">🥰</div>
-            <h1 style="margin:10px 0 6px;">YAYYYYY!</h1>
-            <p style="font-size:18px; opacity:.9; margin:0 0 14px;">
-              You just made my whole day 💗
-            </p>
-            <p style="font-size:14px; opacity:.65; margin:0;">
-              Screenshot this and send it to me 😌
-            </p>
-          </div>
-        </div>
+      buttons.style.display = "none";
+      tiny.textContent = "Screenshot this and send it to me 😏";
+
+      msg.innerHTML = `
+        <div style="font-size:52px; margin: 8px 0 2px;">${emoji}</div>
+        <h2 style="margin: 6px 0 10px; font-size: 24px;">${title}</h2>
+        <p style="margin:0; font-size: 17px;">${line1}</p>
+        <p style="margin:10px 0 0; font-size: 15px; opacity:.85;">
+          <b>Violino Gastronomia Italiana</b> — <b>15th</b> @ <b>7pm</b>
+        </p>
       `;
-    });
+    }
+
+    yesBtn.addEventListener("click", () => showFinal("yes"));
+    noBtn.addEventListener("click", () => showFinal("no"));
   </script>
 </body>
 </html>
