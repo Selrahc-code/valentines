@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>💌 Vanessa</title>
+  <title>💌 for Vanessa</title>
 
   <style>
     :root{
@@ -36,7 +36,6 @@
       opacity:.28;
       background-repeat: repeat;
       background-size: 260px 260px;
-      /* SVG pattern: heart outlines + tiny rose icons (SVG text) */
       background-image: url("data:image/svg+xml;utf8,\
 <svg xmlns='http://www.w3.org/2000/svg' width='260' height='260' viewBox='0 0 260 260'>\
   <rect width='260' height='260' fill='none'/>\
@@ -120,6 +119,16 @@
       pointer-events:none;
       z-index: 9999;
     }
+
+    /* Reaction image (if you upload happy.png + smirk.png) */
+    .reaction{
+      width: 110px;
+      height: auto;
+      margin: 6px auto 12px;
+      display: block;
+      border-radius: 18px;
+      box-shadow: 0 12px 35px rgba(0,0,0,.16);
+    }
   </style>
 </head>
 
@@ -128,10 +137,12 @@
 
   <div class="card" id="card">
     <div class="heart">💖</div>
-    <h1>Vanessa, will you be my valentines?</h1>
+    <h1>Happy V-day!! Will you be my valentines?</h1>
 
     <p>
-      If you say yes… I will treat you to a lovely date night @ <b>Violino Gastronomia Italiana</b>
+      If you say yes… I will treat you to a lovely date night 
+    <p>
+      @ <b>Violino Gastronomia Italiana</b>
       <br/>on <b>February 15th</b> at <b>7pm</b> 🍝
     </p>
 
@@ -139,6 +150,9 @@
       <button id="yes">Yes 💘</button>
       <button id="no">No 🙃</button>
     </div>
+
+    <div class="tiny">choose wisely 😌</div>
+  </div>
 
   <script>
     const card = document.getElementById("card");
@@ -214,22 +228,33 @@
 
       const title = isYes ? "LETS GOOOO!!" : "Yeah… we going anyways 😌";
       const line1 = isYes
-        ? "I shall pick you up <b>6pm</b>! Be there or be <b>BOGOS<b>"
+        ? "I shall pick you up <b>6pm</b>! Be there or be <b>BOGOS</b>"
         : "See you <b>6pm</b> hue hueh hue!";
-      const emoji = isYes ? "🥰" : "😎";
+
+      // If you upload these files later, it will auto-use them:
+      const imageSrc = isYes ? "happy.png" : "smirk.png";
+      const fallbackEmoji = isYes ? "🥰" : "😎";
 
       if(isYes) launchConfetti();
 
-      // wipe the whole card so no old text remains
       card.innerHTML = `
-        <div class="heart">${emoji}</div>
+        <img src="${imageSrc}" class="reaction" alt="reaction"
+             onerror="this.remove(); document.getElementById('emojiFallback').style.display='block';">
+
+        <div class="heart" id="emojiFallback" style="display:none;">${fallbackEmoji}</div>
+
         <h1>${title}</h1>
+
         <p style="font-size:17px; margin-top: 12px;">
           ${line1}
         </p>
+
         <p style="font-size:15px; opacity:.85; margin-top:10px;">
           <b>Violino Gastronomia Italiana</b><br/>
-          <b>15th</b> @ <b>7pm</b>
+          <b>February 15th</b> @ <b>7pm</b>
+        </p>
+
+        <div class="tiny">Screenshot this and send it to me 😏</div>
       `;
     }
 
