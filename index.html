@@ -1,0 +1,98 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>💌</title>
+  <style>
+    body{
+      margin:0; min-height:100vh; display:grid; place-items:center;
+      font-family: system-ui, -apple-system, Segoe UI, Roboto, Arial;
+      background: radial-gradient(circle at top, #ffd1dc, #fff);
+      color:#222;
+    }
+    .card{
+      width:min(520px, 92vw);
+      background: rgba(255,255,255,.85);
+      border: 1px solid rgba(0,0,0,.08);
+      border-radius: 24px;
+      padding: 28px;
+      box-shadow: 0 20px 60px rgba(0,0,0,.12);
+      text-align:center;
+    }
+    h1{ margin:0 0 6px; font-size: 28px; }
+    p{ margin: 10px 0 18px; font-size: 16px; opacity:.9; }
+    .buttons{ display:flex; gap:12px; justify-content:center; flex-wrap:wrap; }
+    button{
+      border:0; border-radius: 16px; padding: 12px 18px;
+      font-size: 16px; cursor:pointer;
+      box-shadow: 0 10px 25px rgba(0,0,0,.12);
+    }
+    #yes{ background:#ff4d6d; color:white; }
+    #no{ background:#f1f1f1; }
+    .small{ font-size: 13px; opacity:.7; margin-top: 14px; }
+    .heart{ font-size: 42px; margin-bottom: 10px; }
+  </style>
+</head>
+<body>
+  <div class="card">
+    <div class="heart">💖</div>
+    <h1>Will you be my Valentine?</h1>
+    <p id="msg">I made this just for you :)</p>
+
+    <div class="buttons">
+      <button id="yes">Yes 💘</button>
+      <button id="no">No 🙃</button>
+    </div>
+
+    <div class="small" id="tiny">tap “yes” (please)</div>
+  </div>
+
+  <script>
+    const msg = document.getElementById("msg");
+    const tiny = document.getElementById("tiny");
+    const noBtn = document.getElementById("no");
+    const yesBtn = document.getElementById("yes");
+
+    const noLines = [
+      "Are you sure? 😭",
+      "Like… 100% sure? 🥲",
+      "Okay but I made this… 😔",
+      "What if I say please? 🙏",
+      "Last chance… 😳"
+    ];
+    let n = 0;
+
+    noBtn.addEventListener("click", () => {
+      msg.textContent = noLines[Math.min(n, noLines.length - 1)];
+      n++;
+      // make the Yes button grow a bit each time
+      const scale = 1 + n * 0.12;
+      yesBtn.style.transform = `scale(${scale})`;
+      tiny.textContent = "the Yes button is looking pretty good rn";
+    });
+
+    yesBtn.addEventListener("click", () => {
+      document.body.innerHTML = `
+        <div style="
+          min-height:100vh; display:grid; place-items:center;
+          font-family: system-ui; background: radial-gradient(circle at top, #fff0f6, #fff);
+          text-align:center; padding:24px;">
+          <div style="
+            width:min(560px, 92vw); background:white; border-radius:28px;
+            padding:34px; box-shadow: 0 20px 60px rgba(0,0,0,.12);">
+            <div style="font-size:52px;">🥰</div>
+            <h1 style="margin:10px 0 6px;">YAYYYYY!</h1>
+            <p style="font-size:18px; opacity:.9; margin:0 0 14px;">
+              You just made my whole day 💗
+            </p>
+            <p style="font-size:14px; opacity:.65; margin:0;">
+              Screenshot this and send it to me 😌
+            </p>
+          </div>
+        </div>
+      `;
+    });
+  </script>
+</body>
+</html>
