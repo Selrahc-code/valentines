@@ -131,17 +131,14 @@
     <h1>Vanessa, will you be my valentines?</h1>
 
     <p>
-      If you say yes… I will treat you to <b>Violino Gastronomia Italiana</b>
-      <br/>on the <b>15th</b> at <b>7pm</b> 👀🍝
+      If you say yes… I will treat you to a lovely date night @ <b>Violino Gastronomia Italiana</b>
+      <br/>on <b>February 15th</b> at <b>7pm</b> 🍝
     </p>
 
     <div class="buttons">
       <button id="yes">Yes 💘</button>
       <button id="no">No 🙃</button>
     </div>
-
-    <div class="tiny">choose wisely 😌</div>
-  </div>
 
   <script>
     const card = document.getElementById("card");
@@ -215,10 +212,10 @@
     function showFinal(type){
       const isYes = type === "yes";
 
-      const title = isYes ? "YAYYY So excited!!" : "Yeah… we going anyways 😌";
+      const title = isYes ? "LETS GOOOO!!" : "Yeah… we going anyways 😌";
       const line1 = isYes
-        ? "I shall pick you up <b>6pm</b>!"
-        : "See you <b>6pm</b>!";
+        ? "I shall pick you up <b>6pm</b>! Be there or be <b>BOGOS<b>"
+        : "See you <b>6pm</b> hue hueh hue!";
       const emoji = isYes ? "🥰" : "😎";
 
       if(isYes) launchConfetti();
@@ -233,8 +230,6 @@
         <p style="font-size:15px; opacity:.85; margin-top:10px;">
           <b>Violino Gastronomia Italiana</b><br/>
           <b>15th</b> @ <b>7pm</b>
-        </p>
-        <div class="tiny">Screenshot this and send it to me 😏</div>
       `;
     }
 
