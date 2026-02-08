@@ -19,6 +19,11 @@
       padding: 28px;
       box-shadow: 0 20px 60px rgba(0,0,0,.12);
       text-align:center;
+      animation: fadeIn .35s ease;
+    }
+    @keyframes fadeIn {
+      from { opacity:0; transform: translateY(6px); }
+      to { opacity:1; transform:none; }
     }
     .heart{ font-size: 44px; margin-bottom: 10px; }
     h1{ margin:0 0 8px; font-size: 28px; }
@@ -37,28 +42,26 @@
   </style>
 </head>
 <body>
+
   <div class="card" id="card">
     <div class="heart">💖</div>
     <h1>Vanessa, will you be my valentines?</h1>
 
-    <p id="msg">
+    <p>
       If you say yes… I will treat you to <b>Violino Gastronomia Italiana</b>
       <br/>on the <b>15th</b> at <b>7pm</b> 👀🍝
     </p>
 
-    <div class="buttons" id="buttons">
+    <div class="buttons">
       <button id="yes">Yes 💘</button>
       <button id="no">No 🙃</button>
     </div>
 
-    <div class="tiny" id="tiny">choose wisely 😌</div>
+    <div class="tiny">choose wisely 😌</div>
   </div>
 
   <script>
     const card = document.getElementById("card");
-    const msg = document.getElementById("msg");
-    const tiny = document.getElementById("tiny");
-    const buttons = document.getElementById("buttons");
     const yesBtn = document.getElementById("yes");
     const noBtn = document.getElementById("no");
 
@@ -71,21 +74,23 @@
         : "See you <b>6pm</b>!";
       const emoji = isYes ? "🥰" : "😎";
 
-      buttons.style.display = "none";
-      tiny.textContent = "Screenshot this and send it to me 😏";
-
       card.innerHTML = `
-        <div style="font-size:52px; margin: 8px 0 2px;">${emoji}</div>
-        <h2 style="margin: 6px 0 10px; font-size: 24px;">${title}</h2>
-        <p style="margin:0; font-size: 17px;">${line1}</p>
-        <p style="margin:10px 0 0; font-size: 15px; opacity:.85;">
-          <b>Violino Gastronomia Italiana</b> — <b>15th</b> @ <b>7pm</b>
+        <div class="heart">${emoji}</div>
+        <h1>${title}</h1>
+        <p style="font-size:17px;">
+          ${line1}
         </p>
+        <p style="font-size:15px; opacity:.85; margin-top:10px;">
+          <b>Violino Gastronomia Italiana</b><br/>
+          <b>15th</b> @ <b>7pm</b>
+        </p>
+        <div class="tiny">Screenshot this and send it to me 😏</div>
       `;
     }
 
     yesBtn.addEventListener("click", () => showFinal("yes"));
     noBtn.addEventListener("click", () => showFinal("no"));
   </script>
+
 </body>
 </html>
