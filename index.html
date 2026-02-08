@@ -4,44 +4,127 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>💌 Vanessa</title>
+
   <style>
-    body{
-      margin:0; min-height:100vh; display:grid; place-items:center;
-      font-family: system-ui, -apple-system, Segoe UI, Roboto, Arial;
-      background: radial-gradient(circle at top, #ffd1dc, #fff);
-      color:#222;
+    :root{
+      --pink1:#ffd1dc;
+      --pink2:#fff;
+      --accent:#ff4d6d;
+      --text:#222;
+      --card: rgba(255,255,255,.88);
+      --shadow: 0 20px 60px rgba(0,0,0,.12);
     }
+
+    body{
+      margin:0;
+      min-height:100vh;
+      display:grid;
+      place-items:center;
+      font-family: system-ui, -apple-system, Segoe UI, Roboto, Arial;
+      color: var(--text);
+      background: radial-gradient(circle at top, var(--pink1), var(--pink2));
+      overflow:hidden;
+      position:relative;
+    }
+
+    /* Hearts + roses etched overlay */
+    body::before{
+      content:"";
+      position:fixed;
+      inset:-40px;
+      pointer-events:none;
+      opacity:.28;
+      background-repeat: repeat;
+      background-size: 260px 260px;
+      /* SVG pattern: heart outlines + tiny rose icons (SVG text) */
+      background-image: url("data:image/svg+xml;utf8,\
+<svg xmlns='http://www.w3.org/2000/svg' width='260' height='260' viewBox='0 0 260 260'>\
+  <rect width='260' height='260' fill='none'/>\
+  <g fill='none' stroke='%23ff6b8a' stroke-width='2' opacity='0.55'>\
+    <path d='M70 72c0-16 13-28 28-28 10 0 19 5 24 13 5-8 14-13 24-13 15 0 28 12 28 28 0 33-52 62-52 62S70 105 70 72z'/>\
+    <path d='M168 168c0-12 9-22 21-22 7 0 13 3 17 9 4-6 10-9 17-9 12 0 21 10 21 22 0 26-38 48-38 48s-38-22-38-48z'/>\
+    <path d='M38 198c0-10 8-18 18-18 6 0 11 3 14 7 3-4 8-7 14-7 10 0 18 8 18 18 0 21-32 40-32 40s-32-19-32-40z'/>\
+  </g>\
+  <g opacity='0.55' fill='%23ff6b8a'>\
+    <circle cx='210' cy='54' r='2.4'/>\
+    <circle cx='40' cy='40' r='2.4'/>\
+    <circle cx='128' cy='220' r='2.4'/>\
+    <circle cx='230' cy='210' r='2.4'/>\
+    <circle cx='90' cy='150' r='2.4'/>\
+  </g>\
+  <g opacity='0.75'>\
+    <text x='195' y='110' font-size='22'>🌹</text>\
+    <text x='30' y='120' font-size='18'>🌹</text>\
+    <text x='150' y='28' font-size='16'>🌹</text>\
+    <text x='110' y='160' font-size='18'>🌹</text>\
+  </g>\
+</svg>");
+      filter: blur(.2px);
+      transform: rotate(-8deg);
+    }
+
+    /* Soft vignette */
+    body::after{
+      content:"";
+      position:fixed;
+      inset:0;
+      pointer-events:none;
+      background: radial-gradient(circle at center, rgba(255,255,255,0) 35%, rgba(255, 200, 215, .35) 100%);
+    }
+
     .card{
       width:min(560px, 92vw);
-      background: rgba(255,255,255,.88);
+      background: var(--card);
       border: 1px solid rgba(0,0,0,.08);
       border-radius: 24px;
       padding: 28px;
-      box-shadow: 0 20px 60px rgba(0,0,0,.12);
+      box-shadow: var(--shadow);
       text-align:center;
+      position:relative;
+      z-index:1;
       animation: fadeIn .35s ease;
+      backdrop-filter: blur(6px);
     }
+
     @keyframes fadeIn {
       from { opacity:0; transform: translateY(6px); }
       to { opacity:1; transform:none; }
     }
+
     .heart{ font-size: 44px; margin-bottom: 10px; }
     h1{ margin:0 0 8px; font-size: 28px; }
     p{ margin: 10px 0; font-size: 16px; opacity:.92; line-height:1.4; }
     .buttons{ display:flex; gap:12px; justify-content:center; flex-wrap:wrap; margin-top: 18px; }
+
     button{
-      border:0; border-radius: 16px; padding: 12px 18px;
-      font-size: 16px; cursor:pointer;
+      border:0;
+      border-radius: 16px;
+      padding: 12px 18px;
+      font-size: 16px;
+      cursor:pointer;
       box-shadow: 0 10px 25px rgba(0,0,0,.12);
-      transition: transform .12s ease;
+      transition: transform .12s ease, filter .12s ease;
     }
+    button:hover{ filter: brightness(1.02); }
     button:active{ transform: scale(.98); }
-    #yes{ background:#ff4d6d; color:white; }
+    #yes{ background: var(--accent); color:white; }
     #no{ background:#f1f1f1; color:#222; }
     .tiny{ font-size: 13px; opacity:.7; margin-top: 14px; }
+
+    /* Confetti canvas */
+    #confetti{
+      position:fixed;
+      inset:0;
+      width:100%;
+      height:100%;
+      pointer-events:none;
+      z-index: 9999;
+    }
   </style>
 </head>
+
 <body>
+  <canvas id="confetti"></canvas>
 
   <div class="card" id="card">
     <div class="heart">💖</div>
@@ -65,6 +148,70 @@
     const yesBtn = document.getElementById("yes");
     const noBtn = document.getElementById("no");
 
+    // --- Confetti (no libraries) ---
+    const canvas = document.getElementById("confetti");
+    const ctx = canvas.getContext("2d");
+
+    function resizeCanvas(){
+      canvas.width = Math.floor(window.innerWidth * devicePixelRatio);
+      canvas.height = Math.floor(window.innerHeight * devicePixelRatio);
+      ctx.setTransform(devicePixelRatio, 0, 0, devicePixelRatio, 0, 0);
+    }
+    window.addEventListener("resize", resizeCanvas);
+    resizeCanvas();
+
+    function launchConfetti(durationMs = 2200){
+      const colors = ["#ff4d6d", "#ff8fab", "#ffd1dc", "#ffb3c6", "#ffffff"];
+      const pieces = [];
+      const count = 180;
+
+      for(let i=0;i<count;i++){
+        pieces.push({
+          x: Math.random() * window.innerWidth,
+          y: -20 - Math.random()*window.innerHeight*0.2,
+          w: 6 + Math.random()*6,
+          h: 8 + Math.random()*10,
+          vx: (Math.random() - 0.5) * 2.8,
+          vy: 2 + Math.random()*4.5,
+          rot: Math.random() * Math.PI,
+          vr: (Math.random() - 0.5) * 0.2,
+          color: colors[Math.floor(Math.random()*colors.length)],
+          alpha: 0.9
+        });
+      }
+
+      const start = performance.now();
+
+      function tick(t){
+        const elapsed = t - start;
+        ctx.clearRect(0,0,window.innerWidth, window.innerHeight);
+
+        for(const p of pieces){
+          p.x += p.vx;
+          p.y += p.vy;
+          p.rot += p.vr;
+          p.vy += 0.02; // gravity
+          p.alpha = Math.max(0, 0.9 - elapsed / durationMs);
+
+          ctx.save();
+          ctx.globalAlpha = p.alpha;
+          ctx.translate(p.x, p.y);
+          ctx.rotate(p.rot);
+          ctx.fillStyle = p.color;
+          ctx.fillRect(-p.w/2, -p.h/2, p.w, p.h);
+          ctx.restore();
+        }
+
+        if(elapsed < durationMs){
+          requestAnimationFrame(tick);
+        } else {
+          ctx.clearRect(0,0,window.innerWidth, window.innerHeight);
+        }
+      }
+
+      requestAnimationFrame(tick);
+    }
+
     function showFinal(type){
       const isYes = type === "yes";
 
@@ -74,21 +221,25 @@
         : "See you <b>6pm</b>!";
       const emoji = isYes ? "🥰" : "😎";
 
+      if(isYes) launchConfetti();
+
+      // wipe the whole card so no old text remains
       card.innerHTML = `
         <div class="heart">${emoji}</div>
         <h1>${title}</h1>
-        <p style="font-size:17px;">
+        <p style="font-size:17px; margin-top: 12px;">
           ${line1}
         </p>
         <p style="font-size:15px; opacity:.85; margin-top:10px;">
           <b>Violino Gastronomia Italiana</b><br/>
           <b>15th</b> @ <b>7pm</b>
+        </p>
+        <div class="tiny">Screenshot this and send it to me 😏</div>
       `;
     }
 
     yesBtn.addEventListener("click", () => showFinal("yes"));
     noBtn.addEventListener("click", () => showFinal("no"));
   </script>
-
 </body>
 </html>
